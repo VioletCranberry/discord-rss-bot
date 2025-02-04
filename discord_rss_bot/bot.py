@@ -71,6 +71,8 @@ class DiscordBot(discord.Client):
         try:
             await channel.send(embed=message)
         except Exception as e:
+            message = f"❗ Error sending entry {entry.link} to channel {feed.channel_id}: {e}"
+            await channel.send(message)
             logging.error(
                 f"Error sending entry {entry.link} to channel {feed.channel_id}: {e}"
             )
