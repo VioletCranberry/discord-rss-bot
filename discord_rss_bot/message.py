@@ -29,7 +29,6 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
     logging.debug("Formatting entry")
 
     title = f"📰 {entry.title}"
-    # Convert the HTML summary to Markdown.
     summary_md = ""
     if hasattr(entry, "summary") and entry.summary:
         summary_md = truncate_html(entry.summary)
@@ -38,10 +37,13 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
     embed = discord.Embed(
         title=title, url=entry.link, color=discord.Color.blue()
     )
-    # Add the summary as a description.
     if summary_md:
-        embed.description = f"💬 Summary: \n {summary_md}"
+        embed.description = f"💬 **Summary:** \n\n {summary_md}"
     else:
-        embed.description = f"💬 No Summary Provided"
-    embed.set_footer(text=f"Source: {entry.feed_url} 🔗")
+        embed.description = f"💬 **Summary:** \n\n No Summary Provided"
+
+    if hasattr(entry, "published") and entry.published:
+        embed.timestamp = entry.published
+
+    embed.set_footer(text=f"🔗 {entry.feed_url} 🔗")
     return embed

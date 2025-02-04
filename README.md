@@ -2,14 +2,16 @@
 
 A Discord bot that delivers RSS feed updates in real-time. Work in progress.
 
-## Docker usage
+## Docker run
 
 ```bash
-docker run -v $(pwd)/config.yaml:/app/config.yaml -v $(pwd)/data:/app/data \
+docker run \
+  -v $(pwd)/config.yaml:/app/config.yaml \
+  -v $(pwd)/data:/app/data \
   ghcr.io/violetcranberry/discord-rss-bot:latest
 ```
 
-## Docker Compose usage
+## Docker compose
 
 ```yaml
 discord-rss-bot:
