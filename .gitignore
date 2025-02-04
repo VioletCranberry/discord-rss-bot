@@ -176,8 +176,9 @@ cython_debug/
 # PyTest cache:
 .pytest_cache/
 
-# Bot sqlite database:
+# Application data:
 *.sqlite3*
+/data
 
-# Personal config files:
-config-personal.yaml
+# Test configuration files:
+config-test.yaml

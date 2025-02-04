@@ -1,4 +1,4 @@
-db_path: rss.sqlite3
+db_path: data/rss.sqlite3
 
 feeds:
   # Hacker news daily

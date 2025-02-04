@@ -86,3 +86,7 @@ venv/
 
 # VS Code
 .vscode/
+
+# Database
+*.sqlite3
+/data

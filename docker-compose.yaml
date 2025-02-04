@@ -7,7 +7,7 @@ services:
       - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
     volumes:
       - ./config.yaml:/app/config.yaml
-      - ./rss.sqlite3:/app/rss.sqlite3
+      - ./data:/app/data
     restart: unless-stopped
   # command:
   #   - "--token=${DISCORD_BOT_TOKEN}"

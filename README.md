@@ -5,8 +5,7 @@ A Discord bot that delivers RSS feed updates in real-time. Work in progress.
 ## Docker usage
 
 ```bash
-docker run -v $(pwd)/config.yaml:/app/config.yaml \
-  -v $(pwd)/rss.sqlite3:/app/rss.sqlite3 \
+docker run -v $(pwd)/config.yaml:/app/config.yaml -v $(pwd)/data:/app/data \
   ghcr.io/violetcranberry/discord-rss-bot:latest
 ```
 
@@ -20,7 +19,7 @@ discord-rss-bot:
       - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
   volumes:
     - ./config.yaml:/app/config.yaml
-    - ./rss.sqlite3:/app/rss.sqlite3
+    - ./data:/app/data
   restart: unless-stopped
   # command:
     #   - "--token=${DISCORD_BOT_TOKEN}"
