@@ -1,7 +1,9 @@
 import discord
 from discord.ext import tasks
 import logging
-from typing import Optional
+from typing import List, Optional
+
+from reader.types import Entry
 
 from discord_rss_bot.rss_reader import RSSReader
 from discord_rss_bot.message import format_entry_for_discord
@@ -49,14 +51,19 @@ class DiscordBot(discord.Client):
         await self.rss_reader.mark_entries_as_read(unread_entries)
 
     async def _process_entries(
-        self, entries, feed: FeedConfig, channel: discord.TextChannel
+        self,
+        entries: List[Entry],
+        feed: FeedConfig,
+        channel: discord.TextChannel,
     ) -> None:
         """Iterates over each entry and sends it to the specified Discord channel."""
-        for entry in entries:
+        for entry in reversed(
+            entries
+        ):  # Reverse the list so that the oldest entry is sent first
             await self._send_entry(entry, feed, channel)
 
     async def _send_entry(
-        self, entry, feed: FeedConfig, channel: discord.TextChannel
+        self, entry: Entry, feed: FeedConfig, channel: discord.TextChannel
     ) -> None:
         """Formats a single entry and sends it to the given Discord channel."""
         message = format_entry_for_discord(entry)
@@ -68,7 +75,9 @@ class DiscordBot(discord.Client):
                 f"Error sending entry {entry.link} to channel {feed.channel_id}: {e}"
             )
 
-    def _get_channel(self, channel_id) -> Optional[discord.TextChannel]:
+    def _get_channel(
+        self, channel_id: int | str
+    ) -> Optional[discord.TextChannel]:
         """
         Retrieves the Discord channel corresponding to channel_id.
         Returns the channel only if it is a TextChannel; otherwise,

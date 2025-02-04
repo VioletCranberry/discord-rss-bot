@@ -6,7 +6,7 @@ class FeedConfig(BaseModel):
     """Configuration for a single RSS feed."""
 
     feed_url: str
-    channel_id: int
+    channel_id: int | str
     update_interval: Optional[int]
 
 
