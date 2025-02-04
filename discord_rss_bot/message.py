@@ -15,6 +15,17 @@ def truncate_html(html: str, length: int = 3000):
     )
 
 
+def extract_images_from_html(html: str):
+    """Extracts image URLs from an HTML string."""
+    soup = BeautifulSoup(html, features="html.parser")
+    images = [
+        img.attrs["src"]  # pyright: ignore[reportAttributeAccessIssue]
+        for img in soup.find_all("img")
+        if "src" in img.attrs  # pyright: ignore[reportAttributeAccessIssue]
+    ]
+    return images
+
+
 def convert_html_to_markdown(html: str) -> str:
     """Converts an HTML string into Markdown format."""
     markdown_text = md(html, heading_style="ATX").strip()
@@ -30,9 +41,15 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
 
     title = f"📰 {entry.title}"
     summary_md = ""
+    image_urls = []
     if hasattr(entry, "summary") and entry.summary:
-        summary_md = truncate_html(entry.summary)
-        summary_md = convert_html_to_markdown(summary_md)
+        summary_md = truncate_html(entry.summary)  # Truncate the summary
+        image_urls = extract_images_from_html(
+            summary_md
+        )  # Extract image URLs from the summary
+        summary_md = convert_html_to_markdown(
+            summary_md
+        )  # Convert the HTML summary to Markdown
 
     embed = discord.Embed(
         title=title, url=entry.link, color=discord.Color.blue()
@@ -46,4 +63,6 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
         embed.timestamp = entry.published
 
     embed.set_footer(text=f"🔗 {entry.feed_url} 🔗")
+    if image_urls:
+        embed.set_image(url=image_urls[0])
     return embed
