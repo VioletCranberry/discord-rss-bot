@@ -1,0 +1,14 @@
+---
+services:
+  discord-rss-bot:
+    image: ghcr.io/violetcranberry/discord-rss-bot:latest
+    container_name: discord-rss-bot
+    environment:
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+    volumes:
+      - ./config.yaml:/app/config.yaml
+      - ./rss.sqlite3:/app/rss.sqlite3
+    restart: unless-stopped
+  # command:
+  #   - "--token=${DISCORD_BOT_TOKEN}"
+  #   - "--debug"

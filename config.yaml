@@ -1,0 +1,15 @@
+db_path: rss.sqlite3
+
+feeds:
+  # Hacker news daily
+  - feed_url: https://www.daemonology.net/hn-daily/index.rss
+    channel_id: <channel_id>
+    update_interval: 60
+  # Ask hacker news weekly
+  - feed_url: https://www.daemonology.net/hn-weekly-ask/index.rss
+    channel_id: <channel_id>
+    update_interval: 30
+  # Hacker News Best
+  - feed_url: https://hnrss.org/best
+    channel_id: <channel_id>
+    update_interval: 30

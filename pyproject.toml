@@ -1,0 +1,20 @@
+[project]
+name = "discord-rss-bot"
+version = "0.1.0"
+description = "A Discord bot that delivers RSS feed updates in real-time."
+authors = [{ name = "VioletCranberry" }]
+readme = "README.md"
+requires-python = ">=3.13,<4.0"
+dependencies = [
+  "discord (>=2.3.2,<3.0.0)",
+  "audioop-lts (>=0.2.1,<0.3.0)",
+  "pyyaml (>=6.0.2,<7.0.0)",
+  "reader (>=3.16,<4.0)",
+  "pydantic (>=2.10.6,<3.0.0)",
+  "html2text (>=2024.2.26,<2025.0.0)",
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
