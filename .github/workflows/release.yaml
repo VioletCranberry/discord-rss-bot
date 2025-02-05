@@ -3,7 +3,6 @@ on:
   release:
     types:
       - published
-      - prereleased
 permissions:
   contents: read
   packages: write
@@ -13,55 +12,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Get latest release tag and pre-release status
+      - name: Get latest release tag
         run: |
           repo_user=$(echo ${{ github.repository }} | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
           repo_name=$(echo ${{ github.repository }} | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')
           release_url="https://api.github.com/repos/$repo_user/$repo_name/releases/latest"
-
-          # Fetch latest release details
-          release_response=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$release_url")
-
-          # Extract release tag and pre-release status
-          release_tag=$(echo "$release_response" | jq -r ".tag_name")
-          is_prerelease=$(echo "$release_response" | jq -r ".prerelease")
-
-          # Ensure release_tag is not empty
-          if [[ -z "$release_tag" || "$release_tag" == "null" ]]; then
-            echo "❌ Error: Could not fetch release tag!"
-            exit 1
-          fi
-
+          release_tag=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$release_url" | jq -r ".tag_name")
           echo "LATEST_RELEASE_TAG=$release_tag" >> $GITHUB_ENV
           echo "REPO_NAME=$repo_name" >> $GITHUB_ENV
           echo "REPO_USER=$repo_user" >> $GITHUB_ENV
-          echo "IS_PRERELEASE=$is_prerelease" >> $GITHUB_ENV
-
-      - name: Set Image Tags
-        run: |
-          IMAGE_NAME="ghcr.io/${{ env.REPO_USER }}/${{ env.REPO_NAME }}"
-          TAGS="${IMAGE_NAME}:${{ env.LATEST_RELEASE_TAG }}"
-
-          if [[ "${{ env.IS_PRERELEASE }}" == "true" ]]; then
-            TAGS="$TAGS,${IMAGE_NAME}:latest-prerelease"
-          else
-            TAGS="$TAGS,${IMAGE_NAME}:latest"
-          fi
-
-          echo "DOCKER_TAGS=$TAGS" >> $GITHUB_ENV
-
-      - name: Log in to the Container Registry
+          if [[ -z "$release_tag" ]]; then echo "variable release_tag is empty!" && exit 1; fi
+      - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Push Docker Image
-        if: env.LATEST_RELEASE_TAG != ''
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ env.DOCKER_TAGS }}
+          tags: |
+            ghcr.io/${{ env.REPO_USER }}/${{ env.REPO_NAME }}:${{ env.LATEST_RELEASE_TAG }}
+            ghcr.io/${{ env.REPO_USER }}/${{ env.REPO_NAME }}:latest
