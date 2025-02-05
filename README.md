@@ -5,7 +5,9 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
-[![Release](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml/badge.svg)](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml)
+![GitHub top language](https://img.shields.io/github/languages/top/violetcranberry/discord-rss-bot)
+![GitHub Release](https://img.shields.io/github/v/release/violetcranberry/discord-rss-bot)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/violetcranberry/discord-rss-bot/release.yaml)
 
 A Discord bot that delivers RSS feed updates in real-time to your servers.
 
@@ -56,7 +58,7 @@ feeds:
     channel_id: 1336383236<redacted>
     update_interval: 30
 
-    # Hacker News Best - top vote getters from the past few days
+  # Hacker News Best - top vote getters from the past few days
   - feed_url: https://hnrss.org/best
     channel_id: 1335577844<redacted>
     update_interval: 30
