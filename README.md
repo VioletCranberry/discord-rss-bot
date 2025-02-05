@@ -5,7 +5,7 @@
 [![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
-[![Release](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml/badge.svg?branch=main)](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml)
+[![Release](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml/badge.svg)](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml)
 
 A Discord bot that delivers RSS feed updates in real-time. Work in progress.
 
