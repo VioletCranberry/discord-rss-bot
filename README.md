@@ -23,6 +23,11 @@ The bot is configured via a YAML file. Here is an example:
 db_path: data/rss.sqlite3 # path to the database
 feeds:
 
+  # Releases of this project
+  - feed_url: https://github.com/VioletCranberry/discord-rss-bot/releases.atom
+    channel_id: 1336277462<redacted>
+    update_interval: 30
+
   # Hacker news daily (Kudos to Colin Percival)
   - feed_url: https://www.daemonology.net/hn-daily/index.rss
     channel_id: 1334640995<redacted>
