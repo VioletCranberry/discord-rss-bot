@@ -1,7 +1,7 @@
-""" 
+"""
 Data models for the bot configuration file.
 
-These models define the structure of the bot's configuration, 
+These models define the structure of the bot's configuration,
 including RSS feed details and database settings.
 
 Uses Pydantic for data validation and structured parsing.

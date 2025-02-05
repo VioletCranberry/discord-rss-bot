@@ -1,4 +1,4 @@
-""" 
+"""
 Discord message formatting functions for RSS feed entries.
 
 This module provides functions to:

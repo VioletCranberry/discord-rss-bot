@@ -1,4 +1,4 @@
-""" 
+"""
 Main entry point for the bot application.
 
 This script initializes the bot by:
