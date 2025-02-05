@@ -1,9 +1,11 @@
-import discord
-from discord.ext import tasks
+"""Discord bot class."""
+
 import logging
 from typing import List, Optional
 
+import discord
 from reader.types import Entry
+from discord.ext import tasks
 
 from discord_rss_bot.rss_reader import RSSReader
 from discord_rss_bot.message import format_entry_for_discord
@@ -11,13 +13,19 @@ from discord_rss_bot.models import FeedConfig
 
 
 class DiscordBot(discord.Client):
+    """Custom Discord bot class."""
+
     def __init__(self, reader: RSSReader, **kwargs):
+        """Initialize the bot."""
         super().__init__(**kwargs)
         self.rss_reader = reader
 
     async def on_ready(self):
+        """Connects to Discord and start the bot."""
         logging.info(
-            f"Logged in as {self.user} (ID: {self.user.id})"  # pyright: ignore[reportOptionalMemberAccess]
+            "Logged in as %s (ID: %s)",
+            self.user,
+            self.user.id,  # pyright: ignore[reportOptionalMemberAccess]
         )
         # Start the background task that periodically checks for new feed entries.
         self.check_feeds.start()
@@ -34,14 +42,16 @@ class DiscordBot(discord.Client):
         # Retrieve unread entries for the feed.
         unread_entries = await self.rss_reader.get_unread_entries(feed.feed_url)
         if not unread_entries:
-            logging.info(f"No unread entries for feed {feed.feed_url}")
+            logging.info("No unread entries for feed %s", feed.feed_url)
             return
 
         # Retrieve the Discord channel ensuring it's a TextChannel.
         channel = self._get_channel(feed.channel_id)
         if channel is None:
             logging.error(
-                f"Channel with ID {feed.channel_id} not found or invalid for feed {feed.feed_url}."
+                "Channel with ID %s not found or invalid for feed %s.",
+                feed.channel_id,
+                feed.feed_url,
             )
             return
 
@@ -67,14 +77,19 @@ class DiscordBot(discord.Client):
     ) -> None:
         """Formats a single entry and sends it to the given Discord channel."""
         message = format_entry_for_discord(entry)
-        logging.info(f"Sending entry {entry.link} to channel {feed.channel_id}")
+        logging.info(
+            "Sending entry %s to channel %s", entry.link, feed.channel_id
+        )
         try:
             await channel.send(embed=message)
-        except Exception as e:
+        except discord.DiscordException as e:
             message = f"❗ Error sending entry {entry.link} to channel {feed.channel_id}: {e}"
             await channel.send(message)
             logging.error(
-                f"Error sending entry {entry.link} to channel {feed.channel_id}: {e}"
+                "Error sending entry %s to channel %s: %s",
+                entry.link,
+                feed.channel_id,
+                e,
             )
 
     def _get_channel(
@@ -88,13 +103,15 @@ class DiscordBot(discord.Client):
         try:
             channel = self.get_channel(int(channel_id))
         except (ValueError, TypeError) as e:
-            logging.error(f"Invalid channel_id '{channel_id}': {e}")
+            logging.error("Invalid channel_id %s: %s", channel_id, e)
             return None
 
         if isinstance(channel, discord.TextChannel):
             return channel
-        else:
-            logging.error(
-                f"Channel with ID {channel_id} is not a TextChannel (got {type(channel).__name__})."
-            )
-            return None
+
+        logging.error(
+            "Channel with ID %s is not a TextChannel (got %s).",
+            channel_id,
+            type(channel).__name__,
+        )
+        return None
