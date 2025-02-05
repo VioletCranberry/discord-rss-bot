@@ -1,4 +1,12 @@
-"""Discord bot class."""
+""" 
+DiscordBot class for managing RSS feed updates in Discord.
+
+This bot periodically checks configured RSS feeds and posts 
+new entries to designated Discord channels. It ensures that:
+- Feeds are updated asynchronously.
+- New RSS entries are posted in the correct order.
+- Errors are handled gracefully without disrupting execution.
+"""
 
 import logging
 import asyncio

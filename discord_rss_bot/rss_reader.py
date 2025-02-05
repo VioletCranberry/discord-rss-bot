@@ -1,4 +1,15 @@
-"""RSS reader class."""
+""" 
+RSSReader class: Asynchronous wrapper around the `reader` library.
+
+This class handles:
+- Managing RSS feeds (adding, updating, and removing).
+- Retrieving unread entries from feeds.
+- Marking entries as read after processing.
+- Ensuring efficient asynchronous execution using `asyncio.to_thread()`.
+
+It acts as the data layer for the Discord bot, allowing it to fetch 
+and process RSS updates efficiently.
+"""
 
 import asyncio
 import logging
