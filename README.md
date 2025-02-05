@@ -79,6 +79,7 @@ docker run \
 
 ```yaml
 discord-rss-bot:
+  # Note: pin the image version to a specific release tag for production use
   image: ghcr.io/violetcranberry/discord-rss-bot:latest
   container_name: discord-rss-bot
   environment:
