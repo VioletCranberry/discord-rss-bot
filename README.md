@@ -7,9 +7,17 @@
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 [![Release](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml/badge.svg)](https://github.com/VioletCranberry/discord-rss-bot/actions/workflows/release.yaml)
 
-A Discord bot that delivers RSS feed updates in real-time. Work in progress.
+A Discord bot that delivers RSS feed updates in real-time to your servers.
 
 Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [FeedCord](https://github.com/Qolors/FeedCord).
+
+## Features
+
+- 🔄 Automated RSS Feed Updates – Periodic updates with configurable intervals.
+- 📜 Enhanced Message Formatting – Attempts to convert HTML to Markdown, truncates long summaries without breaking formatting.
+- 🖼️ Image & Media Support – Uses the first image as an embed cover for rich Discord embeds.
+- ⚡ Efficient & Scalable – Optimized with async processing and concurrent execution.
+- 🐋 Dockerized for Easy Deployment – Run anywhere with minimal setup.
 
 ## Configuration
 

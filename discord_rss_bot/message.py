@@ -1,4 +1,11 @@
-"""Discord Message formatting functions."""
+"""
+Discord message formatting functions for RSS feed entries.
+
+This module provides functions to:
+- Convert HTML content to Markdown.
+- Extract and handle images in summaries.
+- Format RSS entries into `discord.Embed` messages for posting.
+"""
 
 import logging
 
@@ -12,9 +19,13 @@ def truncate_html(html: str, length: int = 3000):
     """Safely truncates provided HTML string."""
     if len(html) <= length:
         return html
-    return str(
-        BeautifulSoup(html[:length] + "... (truncated)", features="html.parser")
-    )
+
+    soup = BeautifulSoup(html[:length], "html.parser")
+    # Append a truncation indicator inside a <strong> tag
+    truncated_tag = soup.new_tag("strong")
+    truncated_tag.string = " ... (truncated)"
+    soup.append(truncated_tag)
+    return str(soup)
 
 
 def extract_images_from_html(html: str):
@@ -45,21 +56,22 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
     summary_md = ""
     image_urls = []
     if hasattr(entry, "summary") and entry.summary:
-        summary_md = truncate_html(entry.summary)  # Truncate the summary
+        truncated_summary = truncate_html(entry.summary)
         image_urls = extract_images_from_html(
-            summary_md
-        )  # Extract image URLs from the summary
+            truncated_summary
+        )  # Extract images first
         summary_md = convert_html_to_markdown(
-            summary_md
-        )  # Convert the HTML summary to Markdown
+            truncated_summary
+        )  # Convert to Markdown
 
     embed = discord.Embed(
         title=title, url=entry.link, color=discord.Color.blue()
     )
-    if summary_md:
-        embed.description = f"💬 **Summary:** \n\n {summary_md}"
-    else:
-        embed.description = "💬 **Summary:** \n\n No Summary Provided"
+    embed.description = (
+        f"💬 **Summary:**\n\n{summary_md}"
+        if summary_md
+        else "💬 **Summary:**\n\n_No Summary Provided_"
+    )
 
     if hasattr(entry, "published") and entry.published:
         embed.timestamp = entry.published
