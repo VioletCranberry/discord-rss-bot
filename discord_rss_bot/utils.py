@@ -1,4 +1,11 @@
-"""Utility functions for the bot application."""
+""" 
+Utility functions for the bot application.
+
+This module provides:
+- Configuration loading and validation.
+- Argument parsing for command-line execution.
+- Environment variable handling for the bot token.
+"""
 
 import argparse
 import os
@@ -26,25 +33,29 @@ def get_bot_token(args: argparse.Namespace) -> str:
 
 def load_config(config_path: str) -> ConfigFile:
     """Load the config file."""
-    logging.info("Loading config file %s", config_path)
+    logging.info("Loading configuration from %s", config_path)
+
     try:
         with open(config_path, "r", encoding="utf-8") as f:
-            config = yaml.safe_load(f)
-            return ConfigFile(**config)
+            config_data = yaml.safe_load(f)
+            return ConfigFile(**config_data)
+
     except FileNotFoundError:
-        logging.error("Configuration file not found.")
-        sys.exit(1)
+        logging.error("Configuration file not found at: %s", config_path)
     except ValidationError as e:
-        logging.error("Error validating config.yaml: %s", e)
-        sys.exit(1)
+        logging.error("Configuration validation failed: %s", e)
     except yaml.YAMLError as e:
-        logging.error("Error parsing config.yaml: %s", e)
-        sys.exit(1)
+        logging.error("YAML parsing error in config file: %s", e)
+
+    sys.exit(1)
 
 
 def get_arguments() -> argparse.Namespace:
     """Parses and returns command line arguments."""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Discord RSS Bot",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
         "-t",
         "--token",
