@@ -1,7 +1,7 @@
-""" 
+"""
 DiscordBot class for managing RSS feed updates in Discord.
 
-This bot periodically checks configured RSS feeds and posts 
+This bot periodically checks configured RSS feeds and posts
 new entries to designated Discord channels. It ensures that:
 - Feeds are updated asynchronously.
 - New RSS entries are posted in the correct order.
@@ -45,13 +45,17 @@ class DiscordBot(discord.Client):
         logging.info("Checking for new RSS updates...")
         await self.rss_reader.update_feeds(scheduled=True)
 
-        feeds = [self._process_feed(feed) for feed in self.rss_reader.config.feeds]
+        feeds = [
+            self._process_feed(feed) for feed in self.rss_reader.config.feeds
+        ]
         await asyncio.gather(*feeds)  # Process all feeds concurrently
 
     async def _process_feed(self, feed: FeedConfig) -> None:
         """Processes a single RSS feed and posts updates to Discord."""
         try:
-            unread_entries = await self.rss_reader.get_unread_entries(feed.feed_url)
+            unread_entries = await self.rss_reader.get_unread_entries(
+                feed.feed_url
+            )
 
             if not unread_entries:
                 logging.info("No unread entries for feed %s", feed.feed_url)
@@ -81,10 +85,13 @@ class DiscordBot(discord.Client):
         channel: discord.TextChannel,
     ) -> None:
         """Sends RSS entries to the designated Discord channel."""
-        logging.info("Sending %d entries to channel %s", len(entries), feed.channel_id)
+        logging.info(
+            "Sending %d entries to channel %s", len(entries), feed.channel_id
+        )
 
         messages = [
-            self._send_entry(entry, feed, channel) for entry in reversed(entries)
+            self._send_entry(entry, feed, channel)
+            for entry in reversed(entries)
         ]
         await asyncio.gather(*messages)  # Send all messages concurrently
 
@@ -95,7 +102,9 @@ class DiscordBot(discord.Client):
         try:
             message = format_entry_for_discord(entry)
             await channel.send(embed=message)
-            logging.info("Sent entry %s to channel %s", entry.link, feed.channel_id)
+            logging.info(
+                "Sent entry %s to channel %s", entry.link, feed.channel_id
+            )
 
         except discord.DiscordException as e:
             logging.error(
@@ -109,7 +118,9 @@ class DiscordBot(discord.Client):
             )
             await channel.send(error_message)  # Notify in Discord channel
 
-    def _get_channel(self, channel_id: int | str) -> Optional[discord.TextChannel]:
+    def _get_channel(
+        self, channel_id: int | str
+    ) -> Optional[discord.TextChannel]:
         """Retrieves and validates the Discord channel."""
         try:
             channel = self.get_channel(int(channel_id))

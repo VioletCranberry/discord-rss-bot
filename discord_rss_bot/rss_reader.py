@@ -1,4 +1,4 @@
-""" 
+"""
 RSSReader class: Asynchronous wrapper around the `reader` library.
 
 This class handles:
@@ -7,7 +7,7 @@ This class handles:
 - Marking entries as read after processing.
 - Ensuring efficient asynchronous execution using `asyncio.to_thread()`.
 
-It acts as the data layer for the Discord bot, allowing it to fetch 
+It acts as the data layer for the Discord bot, allowing it to fetch
 and process RSS updates efficiently.
 """
 
@@ -55,7 +55,9 @@ class RSSReader:
         ]
         await asyncio.gather(*tasks)  # Run all feed additions concurrently
 
-    async def _add_feed(self, feed_url: str, update_interval: Optional[int]) -> None:
+    async def _add_feed(
+        self, feed_url: str, update_interval: Optional[int]
+    ) -> None:
         """Helper function to add a single feed."""
         try:
             logging.info("Adding feed %s", feed_url)
@@ -73,7 +75,9 @@ class RSSReader:
     async def update_feeds(self, scheduled: bool = True) -> None:
         """Updates the RSS feeds."""
         logging.info("Updating RSS Feeds (scheduled: %s)", scheduled)
-        await self._execute_reader_task(self.reader.update_feeds, scheduled=scheduled)
+        await self._execute_reader_task(
+            self.reader.update_feeds, scheduled=scheduled
+        )
 
     async def cleanup_removed_feeds(self) -> None:
         """Deletes RSS feeds removed from the config file."""
@@ -105,7 +109,8 @@ class RSSReader:
         """Retrieve unread entries for a given feed."""
         logging.info("Fetching unread entries for %s", feed_url)
         entries = await self._execute_reader_task(
-            lambda: list(self.reader.get_entries(feed=feed_url, read=False)), default=[]
+            lambda: list(self.reader.get_entries(feed=feed_url, read=False)),
+            default=[],
         )
         return entries if entries is not None else []
 
@@ -121,9 +126,13 @@ class RSSReader:
     async def _mark_entry_as_read(self, entry: Entry) -> None:
         """Helper function to mark a single entry as read."""
         try:
-            await self._execute_reader_task(self.reader.mark_entry_as_read, entry)
+            await self._execute_reader_task(
+                self.reader.mark_entry_as_read, entry
+            )
         except ReaderError as e:
-            logging.error("Error marking entry '%s' as read: %s", entry.title, e)
+            logging.error(
+                "Error marking entry '%s' as read: %s", entry.title, e
+            )
 
     async def _execute_reader_task(self, func, *args, default=None, **kwargs):
         """
