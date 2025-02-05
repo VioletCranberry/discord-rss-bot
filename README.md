@@ -8,7 +8,47 @@
 
 A Discord bot that delivers RSS feed updates in real-time. Work in progress.
 
-Enpowered by [Feed Reader](https://github.com/lemon24/reader).
+Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [FeedCord](https://github.com/Qolors/FeedCord).
+
+## Configuration
+
+1. Create a Discord bot and get its token.
+2. Add the bot to your Discord server & channels.
+
+The bot is configured via a YAML file. Here is an example:
+
+```yaml
+
+db_path: data/rss.sqlite3 # path to the database
+feeds:
+
+  # Hacker news daily (Kudos to Colin Percival)
+  - feed_url: https://www.daemonology.net/hn-daily/index.rss
+    channel_id: 1334640995<redacted>
+    update_interval: 30 # optional, defaults to 60 minutes if not provided
+
+  # Ask hacker news weekly (Kudos to Colin Percival)
+  - feed_url: https://www.daemonology.net/hn-weekly-ask/index.rss
+    channel_id: 1335575467<redacted>
+    update_interval: 30
+
+  # Github - trending (all languages) daily
+  - feed_url: https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml
+    channel_id: 1336324646<redacted>
+    update_interval: 30
+
+  # Github - trending (all languages) weekly
+  - feed_url: https://mshibanami.github.io/GitHubTrendingRSS/weekly/all.xml
+    channel_id: 1336383236<redacted>
+    update_interval: 30
+
+    # Hacker News Best - top vote getters from the past few days
+  - feed_url: https://hnrss.org/best
+    channel_id: 1335577844<redacted>
+    update_interval: 30
+
+  ...
+```
 
 ## Docker run
 
@@ -39,6 +79,7 @@ discord-rss-bot:
 ## Local development
 
 ```bash
+git clone https://github.com/VioletCranberry/discord-rss-bot.git && cd discord-rss-bot
 poetry install --with dev
 
 poetry run python -m discord_rss_bot <args>
