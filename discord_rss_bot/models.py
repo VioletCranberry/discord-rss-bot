@@ -1,5 +1,7 @@
-from pydantic import BaseModel
+"""Models for the bot configuration file."""
+
 from typing import List, Optional
+from pydantic import BaseModel
 
 
 class FeedConfig(BaseModel):

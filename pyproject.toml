@@ -19,3 +19,14 @@ dependencies = [
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.3.4"
+black = "^25.1.0"
+anybadge = "^1.16.0"
+
+[tool.pylint.main]
+fail-under = 9
+
+[tool.black]
+line-length = 80

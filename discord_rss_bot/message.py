@@ -1,9 +1,11 @@
+"""Discord Message formatting functions."""
+
+import logging
+
 from reader.types import Entry
 from markdownify import markdownify as md
 from bs4 import BeautifulSoup
-
 import discord
-import logging
 
 
 def truncate_html(html: str, length: int = 3000):
@@ -57,7 +59,7 @@ def format_entry_for_discord(entry: Entry) -> discord.Embed:
     if summary_md:
         embed.description = f"💬 **Summary:** \n\n {summary_md}"
     else:
-        embed.description = f"💬 **Summary:** \n\n No Summary Provided"
+        embed.description = "💬 **Summary:** \n\n No Summary Provided"
 
     if hasattr(entry, "published") and entry.published:
         embed.timestamp = entry.published

@@ -1,13 +1,15 @@
-from discord_rss_bot.utils import load_config, get_bot_token, get_arguments
-from discord_rss_bot.rss_reader import RSSReader
-from discord_rss_bot.bot import DiscordBot
-
-import discord
+"""Main entry point for the bot application."""
 
 import logging
 import argparse
 import asyncio
 import sys
+
+import discord
+
+from discord_rss_bot.utils import load_config, get_bot_token, get_arguments
+from discord_rss_bot.rss_reader import RSSReader
+from discord_rss_bot.bot import DiscordBot
 
 
 async def main() -> None:
@@ -28,11 +30,12 @@ async def main() -> None:
         rss_reader = RSSReader(config)
         await rss_reader.setup()
 
-        # Create the Discord client with default intents.
+        # Init the Discord client with default intents.
         intents = discord.Intents.default()
         bot = DiscordBot(rss_reader, intents=intents, root_logger=True)
         await bot.start(bot_token)
 
+    # pylint: disable=W0718
     except Exception as e:
         logging.error("An unrecoverable error occurred: %s", e)
         sys.exit(1)
