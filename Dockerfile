@@ -1,4 +1,4 @@
-FROM python:3.13.1-slim-bullseye AS builder
+FROM python:3.13.1-slim-bookworm AS builder
 
 ENV POETRY_NO_INTERACTION=1 \
   POETRY_VIRTUALENVS_IN_PROJECT=1 \
@@ -14,7 +14,7 @@ RUN pip install poetry==2.0.1
 COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-FROM python:3.13.1-slim-bullseye AS runtime
+FROM python:3.13.1-slim-bookworm AS runtime
 
 ENV VIRTUAL_ENV=/app/.venv \
   PATH="/app/.venv/bin:$PATH" \
