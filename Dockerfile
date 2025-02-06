@@ -11,13 +11,12 @@ ENV POETRY_NO_INTERACTION=1 \
 
 WORKDIR /app
 
-# Install system dependencies required for Poetry and building wheels
+# Install dependencies needed for Poetry & Rust-based packages
 RUN apt-get update && apt-get install -y \
   gcc \
   python3-dev \
   libffi-dev \
   build-essential \
-  curl \
   cargo \
   rustc \
   && rm -rf /var/lib/apt/lists/*
