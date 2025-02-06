@@ -13,6 +13,8 @@ A Discord bot that delivers RSS feed updates in real-time to your servers.
 
 Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [FeedCord](https://github.com/Qolors/FeedCord).
 
+![Preview](./.github/images/preview.jpg)
+
 ## Features
 
 - 🔄 Automated RSS Feed Updates – Periodic updates with configurable intervals.
@@ -23,8 +25,9 @@ Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [Feed
 
 ## Configuration
 
-1. Create a Discord bot and get its token.
-2. Add the bot to your Discord server & channels.
+1. Create a Discord server. See also [How do I create a server?](https://support.discord.com/hc/en-us/articles/204849977-How-do-I-create-a-server)
+2. Create a Discord bot account and get its token. See also [Creating a bot account](https://discordpy.readthedocs.io/en/stable/discord.html)
+3. Add the bot to your Discord server & channels.
 
 The bot is configured via a YAML file. Here is an example:
 
@@ -72,7 +75,7 @@ feeds:
 docker run \
   -v $(pwd)/config.yaml:/app/config.yaml \
   -v $(pwd)/data:/app/data \
-  ghcr.io/violetcranberry/discord-rss-bot:latest
+  ghcr.io/violetcranberry/discord-rss-bot:latest --token ${DISCORD_BOT_TOKEN}
 ```
 
 ## Docker compose
