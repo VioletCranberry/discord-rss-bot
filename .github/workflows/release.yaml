@@ -45,7 +45,7 @@ jobs:
         with:
           context: .
           push: true
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,darwin/arm64
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           tags: |
             ghcr.io/${{ env.REPO_USER }}/${{ env.REPO_NAME }}:${{ env.LATEST_RELEASE_TAG }}
             ghcr.io/${{ env.REPO_USER }}/${{ env.REPO_NAME }}:latest
