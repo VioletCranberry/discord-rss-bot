@@ -21,7 +21,7 @@ Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [Feed
 - 📜 Enhanced Message Formatting – Attempts to convert HTML to Markdown, truncates long summaries without breaking formatting.
 - 🖼️ Image & Media Support – Uses the first image as an embed cover for rich Discord embeds.
 - ⚡ Efficient & Scalable – Optimized with async processing and concurrent execution.
-- 🐋 Dockerized for Easy Deployment – Run anywhere with minimal setup.
+- 🐋 Dockerized for Easy Deployment – Run anywhere with minimal setup (`linux/amd64` & `linux/arm64` supported).
 
 ## Configuration
 
