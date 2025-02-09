@@ -11,6 +11,7 @@ new entries to designated Discord channels. It ensures that:
 import logging
 import asyncio
 from typing import List, Optional
+from aiohttp import web
 
 import discord
 import reader
@@ -29,6 +30,7 @@ class DiscordBot(discord.Client):
         """Initialize the bot."""
         super().__init__(**kwargs)
         self.rss_reader = rss_reader
+        self.is_ready_flag = False
 
     async def on_ready(self):
         """Runs when the bot successfully connects to Discord."""
@@ -37,6 +39,7 @@ class DiscordBot(discord.Client):
             self.user,
             self.user.id,  # pyright: ignore[reportOptionalMemberAccess]
         )
+        self.is_ready_flag = True  # Mark bot as ready
         self.check_feeds.start()  # Start the periodic task
 
     @tasks.loop(minutes=5)
@@ -137,3 +140,31 @@ class DiscordBot(discord.Client):
         except (ValueError, TypeError) as e:
             logging.error("Invalid channel ID %s: %s", channel_id, e)
             return None
+
+    async def start_healthchecks(self):
+        """Start a lightweight web server for readiness & liveness checks."""
+        logging.info("Starting healthcheck server...")
+        app = web.Application()
+        app.router.add_get("/healthz", self.liveness_probe)
+        app.router.add_get("/readyz", self.readiness_probe)
+        runner = web.AppRunner(app)
+        await runner.setup()
+        site = web.TCPSite(runner, "0.0.0.0", 8080)  # Expose healthcheck API
+        await site.start()
+
+    async def liveness_probe(self, _request):
+        """Liveness probe – Returns 200 if bot is running."""
+        return web.Response(text="I'm alive!", status=200)
+
+    async def readiness_probe(self, _request):
+        """Readiness probe – Returns 200 if bot is ready to process requests."""
+        if self.is_ready_flag:
+            return web.Response(text="I'm ready!", status=200)
+        return web.Response(text="I'm not ready yet.", status=503)
+
+    async def start(self, token: str, *_args, **_kwargs):
+        """Start the bot and healthcheck server in parallel."""
+        await asyncio.gather(
+            self.start_healthchecks(),  # Start healthchecks
+            super().start(token),  # Start Discord bot
+        )
