@@ -91,9 +91,16 @@ discord-rss-bot:
     - ./config.yaml:/app/config.yaml
     - ./data:/app/data
   restart: unless-stopped
+  healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
   # command:
     #   - "--token=${DISCORD_BOT_TOKEN}"
     #   - "--debug"
+    #   - "--config=/app/config.yaml"
 ```
 
 ## Local development
