@@ -28,6 +28,9 @@ RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 # Stage 2: Runtime
 FROM python:3.13.1-slim-bookworm AS runtime
 
+# Install curl for healthcheck support
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 ENV VIRTUAL_ENV=/app/.venv \
   PATH="/app/.venv/bin:$PATH" \
   PYTHONFAULTHANDLER=1 \
@@ -41,4 +44,8 @@ WORKDIR /app
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY discord_rss_bot ./discord_rss_bot
+
+# Expose healthcheck API
+EXPOSE 8080
+
 ENTRYPOINT ["python", "-m", "discord_rss_bot"]
