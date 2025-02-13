@@ -1,11 +1,12 @@
 """
-DiscordBot class for managing RSS feed updates in Discord.
+DiscordBot: An Asynchronous Discord Bot for Posting RSS Feed Updates
 
-This bot periodically checks configured RSS feeds and posts
-new entries to designated Discord channels. It ensures that:
-- Feeds are updated asynchronously.
-- New RSS entries are posted in the correct order.
-- Errors are handled gracefully without disrupting execution.
+This bot periodically checks configured RSS feeds and posts new entries
+to designated Discord channels. Key features include:
+  - Asynchronous RSS feed updates via an RSSReader instance.
+  - Concurrent processing of multiple feeds and their entries.
+  - Graceful error handling to avoid disruptions in execution.
+  - Built-in healthcheck endpoints for liveness and readiness monitoring.
 """
 
 import logging
@@ -18,7 +19,7 @@ import reader
 from reader.types import Entry
 from discord.ext import tasks
 
-from discord_rss_bot.rss_reader import RSSReader
+from discord_rss_bot.rss import RSSReader
 from discord_rss_bot.message import format_entry_for_discord
 from discord_rss_bot.models import FeedConfig
 
@@ -92,19 +93,19 @@ class DiscordBot(discord.Client):
             "Sending %d entries to channel %s", len(entries), feed.channel_id
         )
 
-        messages = [
+        message_tasks = [
             self._send_entry(entry, feed, channel)
             for entry in reversed(entries)
         ]
-        await asyncio.gather(*messages)  # Send all messages concurrently
+        await asyncio.gather(*message_tasks)  # Send all messages concurrently
 
     async def _send_entry(
         self, entry: "Entry", feed: FeedConfig, channel: discord.TextChannel
     ) -> None:
         """Formats and sends an RSS entry to a Discord channel."""
         try:
-            message = format_entry_for_discord(entry)
-            await channel.send(embed=message)
+            message_embded = format_entry_for_discord(entry)
+            await channel.send(embed=message_embded)
             logging.info(
                 "Sent entry %s to channel %s", entry.link, feed.channel_id
             )
@@ -165,6 +166,8 @@ class DiscordBot(discord.Client):
     async def start(self, token: str, *_args, **_kwargs):
         """Start the bot and healthcheck server in parallel."""
         await asyncio.gather(
-            self.start_healthchecks(),  # Start healthchecks
-            super().start(token),  # Start Discord bot
+            # Start healthchecks
+            self.start_healthchecks(),
+            # Start Discord bot
+            super().start(token),
         )
