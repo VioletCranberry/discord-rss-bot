@@ -17,7 +17,7 @@ import sys
 import discord
 
 from discord_rss_bot.utils import load_config, get_bot_token, get_arguments
-from discord_rss_bot.rss_reader import RSSReader
+from discord_rss_bot.rss import RSSReader
 from discord_rss_bot.bot import DiscordBot
 
 
