@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all tags and branches (required for Poetry dynamicversioning)
 
       - name: Get latest release tag
         run: |
@@ -52,3 +54,5 @@ jobs:
           for f in ./dist/*; do 
             gh release upload ${{ env.LATEST_RELEASE_TAG }} "$f"
           done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
