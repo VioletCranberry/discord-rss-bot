@@ -1,0 +1,54 @@
+name: Publish Pypi Package
+on:
+  release:
+    types:
+      - published
+permissions:
+  contents: read
+  packages: write
+jobs:
+  release-pypi-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get latest release tag
+        run: |
+          repo_user=$(echo ${{ github.repository }} | cut -d'/' -f1 | tr '[:upper:]' '[:lower:]')
+          repo_name=$(echo ${{ github.repository }} | cut -d'/' -f2 | tr '[:upper:]' '[:lower:]')
+          release_url="https://api.github.com/repos/$repo_user/$repo_name/releases/latest"
+
+          release_tag=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "$release_url" | jq -r ".tag_name")
+
+          echo "LATEST_RELEASE_TAG=$release_tag" >> $GITHUB_ENV
+          if [[ -z "$release_tag" ]]; then echo "❌ Error: Release tag is empty!" && exit 1; fi
+          echo "✅ Release tag is set to $release_tag"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install Poetry
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry==2.0.1
+
+      - name: Configure Poetry Authentication
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+
+      - name: Install Dependencies
+        run: poetry install --no-interaction --no-root
+
+      - name: Build package
+        run: poetry build
+
+      - name: Publish package to Pypi
+        run: poetry publish
+
+      - name: Upload Release Assets
+        run: |
+          for f in ./dist/*; do 
+            gh release upload ${{ env.LATEST_RELEASE_TAG }} "$f"
+          done

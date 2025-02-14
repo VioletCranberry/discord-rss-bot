@@ -1,4 +1,4 @@
-name: Release
+name: Build & Push Docker Image
 on:
   release:
     types:
@@ -7,7 +7,7 @@ permissions:
   contents: read
   packages: write
 jobs:
-  release:
+  release-docker-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -32,6 +32,7 @@ jobs:
           echo "REPO_USER=$repo_user" >> $GITHUB_ENV
 
           if [[ -z "$release_tag" ]]; then echo "❌ Error: Release tag is empty!" && exit 1; fi
+          echo "✅ Release tag is set to $release_tag"
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
