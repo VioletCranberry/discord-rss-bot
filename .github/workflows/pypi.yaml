@@ -4,7 +4,7 @@ on:
     types:
       - published
 permissions:
-  contents: read
+  contents: write
   packages: write
 jobs:
   release-pypi-package:
