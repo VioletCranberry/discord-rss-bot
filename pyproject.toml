@@ -1,9 +1,10 @@
 [project]
 name = "discord-rss-bot"
-version = "0.1.0"
 description = "A Discord bot that delivers RSS feed updates in real-time."
 authors = [{ name = "VioletCranberry" }]
 readme = "README.md"
+license = "MIT"
+license-files = ["LICEN[CS]E.*"]
 requires-python = ">=3.13,<4.0"
 dependencies = [
   "discord (>=2.3.2,<3.0.0)",
@@ -14,16 +15,37 @@ dependencies = [
   "markdownify (>=0.14.1,<0.15.0)",
   "beautifulsoup4 (>=4.13.2,<5.0.0)",
 ]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+]
+keywords = ["packaging", "poetry", "discord", "rss", "bot"]
 
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://github.com/VioletCranberry/discord-rss-bot"
+repository = "https://github.com/VioletCranberry/discord-rss-bot"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning>=1.0.0,<2.0.0"]
+build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry]
+version = "0.0.0"
+[tool.poetry.requires-plugins]
+poetry-dynamic-versioning = { version = ">=1.0.0,<2.0.0", extras = ["plugin"] }
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.3.4"
 black = "^25.1.0"
 anybadge = "^1.16.0"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+
+[tool.poetry.scripts]
+your_package = "discord_rss_bot.__main__:main"
 
 [tool.pylint.main]
 fail-under = 9

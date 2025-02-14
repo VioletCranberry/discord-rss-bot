@@ -7,7 +7,6 @@
 [![Poetry](https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json)](https://python-poetry.org/)
 ![GitHub top language](https://img.shields.io/github/languages/top/violetcranberry/discord-rss-bot)
 ![GitHub Release](https://img.shields.io/github/v/release/violetcranberry/discord-rss-bot)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/violetcranberry/discord-rss-bot/release.yaml)
 
 A Discord bot that delivers RSS feed updates in real-time to your servers.
 
@@ -67,6 +66,13 @@ feeds:
     update_interval: 30
 
   ...
+```
+
+## Pypi package
+
+```bash
+pip install discord-rss-bot
+mkdir data && python -m discord_rss_bot --token ${DISCORD_BOT_TOKEN} --config config.yaml
 ```
 
 ## Docker run
