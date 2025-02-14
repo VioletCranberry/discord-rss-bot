@@ -10,6 +10,9 @@
 
 A Discord bot that delivers RSS feed updates in real-time to your servers.
 
+👉 Check out the [Docker image](https://github.com/VioletCranberry/discord-rss-bot/pkgs/container/discord-rss-bot) for easy deployment.  
+👉 Check out the [Pypi package](https://pypi.org/project/discord-rss-bot/) for easy installation.
+
 Enpowered by [Feed Reader](https://github.com/lemon24/reader). Inspired by [FeedCord](https://github.com/Qolors/FeedCord).
 
 ![Preview](./.github/images/preview.jpg)
